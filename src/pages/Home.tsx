@@ -561,21 +561,23 @@ export default function Home() {
       })
 
       if (result.success && result.response) {
-        // Parse the response - full structure: { status, result: { answer_text, sources, confidence_score }, metadata }
-        const apiResponse = result.response
+        // The API response structure is: { status, result: { answer_text, sources, confidence_score }, metadata }
+        // callAIAgent returns it in result.response since data.response doesn't exist, it falls back to data
+        const apiData = result.response
+
         let answerText = ''
         let sources: Source[] = []
         let confidence = 75
 
-        // Extract from result object
-        if (apiResponse.result) {
-          answerText = apiResponse.result.answer_text || ''
-          sources = Array.isArray(apiResponse.result.sources) ? apiResponse.result.sources : []
-          confidence = apiResponse.result.confidence_score !== undefined ? Math.round(apiResponse.result.confidence_score * 100) : 75
-        } else if (typeof apiResponse === 'string') {
-          answerText = apiResponse
+        // The apiData structure has result as a nested object
+        if (apiData && apiData.result && typeof apiData.result === 'object') {
+          answerText = apiData.result.answer_text || ''
+          sources = Array.isArray(apiData.result.sources) ? apiData.result.sources : []
+          confidence = apiData.result.confidence_score !== undefined ? Math.round(apiData.result.confidence_score * 100) : 75
+        } else if (typeof apiData === 'string') {
+          answerText = apiData
         } else {
-          answerText = JSON.stringify(apiResponse)
+          answerText = 'Unable to parse response'
         }
 
         // Add agent message
