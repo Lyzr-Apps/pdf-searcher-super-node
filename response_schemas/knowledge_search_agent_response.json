@@ -1,0 +1,38 @@
+{
+  "agent_name": "Knowledge Search Agent",
+  "agent_id": "695e3a21e02ec0b2d8e567cf",
+  "agent_purpose": "Provides accurate answers to user questions based on uploaded PDF documents with source references",
+  "description": "Knowledge Search Agent returns structured JSON responses with answer text, source citations including document names and page numbers, and confidence scores for RAG-based document search",
+  "response_schema": {
+    "status": "string (success|error)",
+    "result": {
+      "response": "string",
+      "action_taken": "string (optional)",
+      "data": "object (optional, any structured data)",
+      "suggestions": [
+        "string (optional)"
+      ]
+    },
+    "metadata": {
+      "agent_name": "string",
+      "timestamp": "string (ISO)"
+    }
+  },
+  "example_response": {
+    "status": "success",
+    "result": {
+      "response": "I've completed the task you requested",
+      "action_taken": "Processed the input and generated output",
+      "data": {
+        "key": "value"
+      },
+      "suggestions": [
+        "You might also want to try X"
+      ]
+    },
+    "metadata": {
+      "agent_name": "Knowledge Search Agent",
+      "timestamp": "2025-01-15T10:30:00Z"
+    }
+  }
+}
