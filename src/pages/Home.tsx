@@ -561,25 +561,21 @@ export default function Home() {
       })
 
       if (result.success && result.response) {
-        // Parse the response
-        const response = result.response
+        // Parse the response - full structure: { status, result: { answer_text, sources, confidence_score }, metadata }
+        const apiResponse = result.response
         let answerText = ''
         let sources: Source[] = []
         let confidence = 75
 
-        // Handle response structure: { status, result: { answer_text, sources, confidence_score } }
-        if (response.result) {
-          answerText = response.result.answer_text || ''
-          sources = Array.isArray(response.result.sources) ? response.result.sources : []
-          confidence = response.result.confidence_score !== undefined ? Math.round(response.result.confidence_score * 100) : 75
-        } else if (typeof response === 'string') {
-          answerText = response
-        } else if (response.answer_text) {
-          answerText = response.answer_text
-          sources = Array.isArray(response.sources) ? response.sources : []
-          confidence = response.confidence_score !== undefined ? Math.round(response.confidence_score * 100) : 75
+        // Extract from result object
+        if (apiResponse.result) {
+          answerText = apiResponse.result.answer_text || ''
+          sources = Array.isArray(apiResponse.result.sources) ? apiResponse.result.sources : []
+          confidence = apiResponse.result.confidence_score !== undefined ? Math.round(apiResponse.result.confidence_score * 100) : 75
+        } else if (typeof apiResponse === 'string') {
+          answerText = apiResponse
         } else {
-          answerText = JSON.stringify(response)
+          answerText = JSON.stringify(apiResponse)
         }
 
         // Add agent message
